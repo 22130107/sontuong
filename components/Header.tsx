@@ -1,25 +1,39 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart-context";
-import { COMPANY_INFO, LOGO_URL, CART_ICON_URL } from "@/lib/data";
+import { COMPANY_INFO, LOGO_URL, CART_ICON_URL, PRODUCTS } from "@/lib/data";
+
+// NaSun brand colors
+const BLUE = "#1a3a8f";
+const GOLD = "#e8b800";
+
+// Dropdown items — unique product names
+const PRODUCT_DROPDOWN = Array.from(
+  new Map(PRODUCTS.map((p) => [p.name, p])).values()
+).map((p) => ({ label: p.name, href: `/san-pham/${p.slug}`, thumbnail: p.thumbnail }));
 
 const NAV_ITEMS = [
   { label: "Trang chủ", href: "/" },
   { label: "Giới thiệu", href: "/gioi-thieu" },
-  { label: "Sản phẩm", href: "/san-pham" },
+  { label: "Sản phẩm", href: "/san-pham", dropdown: PRODUCT_DROPDOWN },
   { label: "Công trình", href: "/cong-trinh" },
   { label: "Dịch vụ", href: "/dich-vu" },
   { label: "Tin tức", href: "/tin-tuc" },
   { label: "Liên hệ", href: "/lien-he" },
 ];
 
-// NaSun brand colors
-const BLUE = "#1a3a8f";
-const GOLD = "#e8b800";
+// Paint roller icon (matches design)
+function PaintIcon() {
+  return (
+    <svg className="w-5 h-5 flex-shrink-0 text-[#1a3a8f]" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18 4V3c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V6h1v4H9c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-9h9V4h-3z"/>
+    </svg>
+  );
+}
 
 export default function Header({ sticky = false }: { sticky?: boolean }) {
   const pathname = usePathname();
@@ -27,7 +41,11 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
   const { totalItems } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileProductOpen, setMobileProductOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLLIElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!sticky) return;
@@ -35,6 +53,26 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [sticky]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const handleMouseEnter = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setDropdownOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    closeTimer.current = setTimeout(() => setDropdownOpen(false), 150);
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,27 +181,104 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
         style={{ backgroundColor: "#142e75", borderTopColor: "rgba(255,255,255,0.15)" }}
       >
         <div className="flex items-center justify-between w-full max-w-[1320px] mx-auto px-4">
-          <ul className="flex items-center flex-wrap flex-1">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.href} className="relative">
-                <Link
-                  href={item.href}
-                  className={`inline-flex items-center font-bold uppercase text-[15px] tracking-wide px-3 py-[10px] transition-colors ${
-                    isActive(item.href)
-                      ? "text-yellow-400 border-b-2 border-yellow-400"
-                      : "text-white hover:text-yellow-400"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+          <ul className="flex items-center flex-1">
+            {NAV_ITEMS.map((item) => {
+              if (item.dropdown) {
+                // ── Dropdown item ──
+                return (
+                  <li
+                    key={item.href}
+                    ref={dropdownRef}
+                    className="relative"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    <Link
+                      href={item.href}
+                      className={`inline-flex items-center gap-1 font-bold uppercase text-[15px] tracking-wide px-3 py-[10px] transition-colors ${
+                        isActive(item.href)
+                          ? "text-yellow-400 border-b-2 border-yellow-400"
+                          : "text-white hover:text-yellow-400"
+                      }`}
+                    >
+                      {item.label}
+                      {/* Chevron */}
+                      <svg
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </Link>
+
+                    {/* Dropdown panel */}
+                    {dropdownOpen && (
+                      <div
+                        className="absolute left-0 top-full z-50 bg-white shadow-xl rounded-b border-t-2 min-w-[220px]"
+                        style={{ borderTopColor: GOLD }}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <ul>
+                          {item.dropdown.map((sub, i) => (
+                            <li
+                              key={sub.href}
+                              className={`border-b last:border-0`}
+                              style={{ borderBottomColor: "#f0f0f0" }}
+                            >
+                              <Link
+                                href={sub.href}
+                                className="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-blue-50 hover:text-[#1a3a8f] transition-colors text-[15px] font-medium"
+                                onClick={() => setDropdownOpen(false)}
+                              >
+                                <PaintIcon />
+                                <span>{sub.label}</span>
+                              </Link>
+                            </li>
+                          ))}
+                          {/* View all */}
+                          <li className="border-t" style={{ borderTopColor: "#e8b800" }}>
+                            <Link
+                              href="/san-pham"
+                              className="flex items-center justify-center gap-1 px-4 py-2.5 text-sm font-bold text-white transition-colors"
+                              style={{ backgroundColor: "#1a3a8f" }}
+                              onClick={() => setDropdownOpen(false)}
+                            >
+                              Xem tất cả sản phẩm
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                              </svg>
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </li>
+                );
+              }
+
+              // ── Regular nav item ──
+              return (
+                <li key={item.href} className="relative">
+                  <Link
+                    href={item.href}
+                    className={`inline-flex items-center font-bold uppercase text-[15px] tracking-wide px-3 py-[10px] transition-colors ${
+                      isActive(item.href)
+                        ? "text-yellow-400 border-b-2 border-yellow-400"
+                        : "text-white hover:text-yellow-400"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
 
           {/* Cart button */}
           <Link
             href="/gio-hang"
-            className="flex items-center gap-2 font-bold uppercase text-sm px-4 py-2 rounded text-white transition-colors hover:opacity-90"
+            className="flex items-center gap-2 font-bold uppercase text-sm px-4 py-2 rounded transition-colors hover:opacity-90 flex-shrink-0"
             style={{ backgroundColor: GOLD, color: "#1a1a1a" }}
           >
             <span>Giỏ hàng</span>
@@ -208,19 +323,58 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
               </button>
             </form>
           </div>
+
           <ul>
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-3 font-bold uppercase text-sm border-b ${
-                    isActive(item.href) ? "text-yellow-400" : "text-white hover:text-yellow-400"
-                  }`}
-                  style={{ borderBottomColor: "rgba(255,255,255,0.1)" }}
-                >
-                  {item.label}
-                </Link>
+                {item.dropdown ? (
+                  <>
+                    {/* Sản phẩm toggle */}
+                    <button
+                      onClick={() => setMobileProductOpen(!mobileProductOpen)}
+                      className="w-full flex items-center justify-between px-4 py-3 font-bold uppercase text-sm border-b text-white"
+                      style={{ borderBottomColor: "rgba(255,255,255,0.1)" }}
+                    >
+                      <span style={{ color: isActive(item.href) ? GOLD : undefined }}>
+                        {item.label}
+                      </span>
+                      <svg
+                        className={`w-4 h-4 transition-transform ${mobileProductOpen ? "rotate-180" : ""}`}
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    {mobileProductOpen && (
+                      <ul style={{ backgroundColor: "#0f2460" }}>
+                        {item.dropdown.map((sub) => (
+                          <li key={sub.href}>
+                            <Link
+                              href={sub.href}
+                              onClick={() => { setMobileMenuOpen(false); setMobileProductOpen(false); }}
+                              className="flex items-center gap-3 px-6 py-2.5 text-sm text-white/80 hover:text-yellow-400 border-b"
+                              style={{ borderBottomColor: "rgba(255,255,255,0.07)" }}
+                            >
+                              <PaintIcon />
+                              {sub.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block px-4 py-3 font-bold uppercase text-sm border-b ${
+                      isActive(item.href) ? "text-yellow-400" : "text-white hover:text-yellow-400"
+                    }`}
+                    style={{ borderBottomColor: "rgba(255,255,255,0.1)" }}
+                  >
+                    {item.label}
+                  </Link>
+                )}
               </li>
             ))}
             <li>
@@ -238,6 +392,7 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
               </Link>
             </li>
           </ul>
+
           {/* Mobile contact */}
           <div className="px-4 py-3 text-sm" style={{ color: GOLD }}>
             <p className="mb-1">📍 {COMPANY_INFO.address}</p>
