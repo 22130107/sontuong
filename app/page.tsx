@@ -1,65 +1,118 @@
-import Image from "next/image";
+import type { Metadata } from "next";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Slider from "@/components/Slider";
+import ProjectGrid from "@/components/ProjectGrid";
+import ProductCard from "@/components/ProductCard";
+import { SLIDER_IMAGES, PROJECTS, PRODUCTS } from "@/lib/data";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "Trang Chủ | Sơn Mặt Trời Việt NaSun – Vũng Tàu",
+  description:
+    "Sơn Mặt Trời Việt NaSun – Chuyên thi công sơn nước, trần thạch cao tại Vũng Tàu. Liên hệ để được tư vấn miễn phí.",
+  alternates: {
+    canonical: "https://example.com",
+  },
+  openGraph: {
+    title: "Trang Chủ | Sơn Mặt Trời Việt NaSun – Vũng Tàu",
+    description:
+      "Chuyên thi công sơn nước, trần thạch cao tại Vũng Tàu. Liên hệ để được tư vấn miễn phí.",
+    url: "https://example.com",
+    type: "website",
+  },
+};
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="bg-[rgb(246,247,249)] min-h-screen">
+      <Header />
+      <main id="main">
+        {/* Hero Slider */}
+        <Slider images={SLIDER_IMAGES} autoPlayInterval={5000} />
+
+        {/* Featured Projects */}
+        <section className="bg-white py-8">
+          <div className="max-w-[1320px] mx-auto px-4">
+            <h4
+              className="text-center font-bold uppercase text-[rgb(253,239,10)] text-[17px] tracking-[0.85px] leading-[54px] mb-2"
+              style={{
+                backgroundImage:
+                  'url("https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2Fcd4d669c1394924a08ccd738cf47c7fce2aee613.png?generation=1777545030334102&alt=media")',
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                fontFamily: "Merriweather, sans-serif",
+                textShadow: "rgb(153,153,153) 2px 2px 3px",
+              }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              CÔNG TRÌNH TIÊU BIỂU
+            </h4>
+            <ProjectGrid projects={PROJECTS} showTabs={true} />
+          </div>
+        </section>
+
+        {/* Featured Products */}
+        <section className="py-8">
+          <div className="max-w-[1320px] mx-auto px-4">
+            <h2
+              className="text-center font-bold uppercase text-[rgb(26,58,143)] text-2xl mb-6"
+              style={{ fontFamily: "Merriweather, sans-serif" }}
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+              SẢN PHẨM NỔI BẬT
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {PRODUCTS.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Why choose us */}
+        <section className="bg-white py-10">
+          <div className="max-w-[1320px] mx-auto px-4">
+            <h2
+              className="text-center font-bold uppercase text-[rgb(26,58,143)] text-2xl mb-8"
+              style={{ fontFamily: "Merriweather, sans-serif" }}
+            >
+              TẠI SAO CHỌN MẶT TRỜI VIỆT NASUN?
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                {
+                  icon: "🏆",
+                  title: "Sản phẩm chính hãng",
+                  desc: "Phân phối trực tiếp từ các hãng sơn lớn: Dulux, Jotun, Nippon, Esse, Kova",
+                },
+                {
+                  icon: "👷",
+                  title: "Thợ lành nghề",
+                  desc: "Đội ngũ thợ được đào tạo chuyên môn, kinh nghiệm nhiều năm trong nghề",
+                },
+                {
+                  icon: "✅",
+                  title: "Bảo hành công trình",
+                  desc: "Cam kết bảo hành công trình, đảm bảo chất lượng sau thi công",
+                },
+                {
+                  icon: "💰",
+                  title: "Giá cả hợp lý",
+                  desc: "Báo giá minh bạch, cạnh tranh, phù hợp với mọi ngân sách",
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="text-center p-6 rounded-lg border border-gray-100 hover:shadow-md transition-shadow"
+                >
+                  <div className="text-4xl mb-3">{item.icon}</div>
+                  <h3 className="font-bold text-[rgb(26,58,143)] mb-2">{item.title}</h3>
+                  <p className="text-gray-600 text-sm">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
+      <Footer />
     </div>
   );
 }
