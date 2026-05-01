@@ -7,6 +7,8 @@ import ProjectGrid from "@/components/ProjectGrid";
 import { BreadcrumbSchema } from "@/components/SchemaMarkup";
 import { getProjectsFromDB } from "@/lib/db-data";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: "Công Trình",
   description:

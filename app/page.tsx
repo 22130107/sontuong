@@ -7,7 +7,7 @@ import ProductCard from "@/components/ProductCard";
 import { getProductsFromDB, getProjectsFromDB, getSlidersFromDB } from "@/lib/db-data";
 
 // Không cache trang chủ — luôn lấy data mới nhất từ DB
-export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: "Trang Chủ | Sơn Mặt Trời Việt NaSun – Vũng Tàu",

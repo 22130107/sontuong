@@ -8,6 +8,8 @@ import { BreadcrumbSchema } from "@/components/SchemaMarkup";
 import { getProductsFromDB } from "@/lib/db-data";
 import SortSelect from "./SortSelect";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: "Sản Phẩm",
   description:

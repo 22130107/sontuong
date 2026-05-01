@@ -7,6 +7,8 @@ import { getServicesFromDB } from "@/lib/db-data";
 import Image from "next/image";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: "Dịch Vụ",
   description: "Dịch vụ thi công sơn nước, sơn nhà mới, sơn sửa nhà cũ, thi công trần thạch cao, xử lý tường nứt thấm dột tại Vũng Tàu.",
