@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/admin/layout,_N_T_/admin/san-pham/layout,_N_T_/admin/san-pham/them/layout,_N_T_/admin/san-pham/them/page,_N_T_/admin/san-pham/them"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/admin/san-pham/them/__PAGE__",
+    "/admin/san-pham/them",
+    "/admin/san-pham",
+    "/admin",
+    "/_index",
+    "/_head"
+  ]
+}

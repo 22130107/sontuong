@@ -1,0 +1,3 @@
+module.exports=[14747,(e,s,t)=>{s.exports=e.x("path",()=>require("path"))},22734,(e,s,t)=>{s.exports=e.x("fs",()=>require("fs"))},24868,(e,s,t)=>{s.exports=e.x("fs/promises",()=>require("fs/promises"))},34608,e=>{"use strict";var s=e.i(24868),t=e.i(22734),i=e.i(14747);async function r(e){if(!e||!e.startsWith("/uploads/"))return;let r=i.default.basename(e);if(!r||r.includes(".."))return;let a=i.default.join(process.cwd(),"public","uploads",r);(0,t.existsSync)(a)&&await (0,s.unlink)(a).catch(()=>{})}e.s(["deleteUploadedFile",0,r])}];
+
+//# sourceMappingURL=%5Broot-of-the-server%5D__0n0t3hp._.js.map

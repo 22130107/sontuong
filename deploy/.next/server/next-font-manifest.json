@@ -1,0 +1,142 @@
+{
+  "app": {
+    "[project]/app/_not-found/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/banner/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/cong-trinh/[id]/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/cong-trinh/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/cong-trinh/them/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/dich-vu/[id]/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/dich-vu/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/dich-vu/them/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/don-hang/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/login/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/san-pham/[id]/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/san-pham/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/admin/san-pham/them/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/cong-trinh/[slug]/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/cong-trinh/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/dich-vu/[slug]/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/dich-vu/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/gio-hang/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/gioi-thieu/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/lien-he/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/san-pham/[slug]/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/san-pham/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/tim-kiem/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/tin-tuc/[slug]/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ],
+    "[project]/app/tin-tuc/page": [
+      "static/media/8fcf71678f67d0c5-s.p.0kn0u2cosumsr.woff2",
+      "static/media/ce62453a442c7f35-s.p.0333ktddfbsxy.woff2",
+      "static/media/248e1dc0efc99276-s.p.0ft7o6kv5bp14.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

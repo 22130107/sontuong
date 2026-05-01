@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/tin-tuc/layout,_N_T_/tin-tuc/[slug]/layout,_N_T_/tin-tuc/[slug]/page,_N_T_/tin-tuc/don-vi-thi-cong-son-nuoc-chuyen-nghiep-tai-vung-tau"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/tin-tuc/$d$slug/__PAGE__",
+    "/tin-tuc/$d$slug",
+    "/tin-tuc",
+    "/_index",
+    "/_head"
+  ]
+}

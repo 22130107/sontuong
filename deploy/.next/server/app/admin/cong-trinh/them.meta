@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/admin/layout,_N_T_/admin/cong-trinh/layout,_N_T_/admin/cong-trinh/them/layout,_N_T_/admin/cong-trinh/them/page,_N_T_/admin/cong-trinh/them"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/admin/cong-trinh/them/__PAGE__",
+    "/admin/cong-trinh/them",
+    "/admin/cong-trinh",
+    "/admin",
+    "/_index",
+    "/_head"
+  ]
+}

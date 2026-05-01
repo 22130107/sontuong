@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/dich-vu/layout,_N_T_/dich-vu/[slug]/layout,_N_T_/dich-vu/[slug]/page,_N_T_/dich-vu/son-nha-moi"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/dich-vu/$d$slug/__PAGE__",
+    "/dich-vu/$d$slug",
+    "/dich-vu",
+    "/_index",
+    "/_head"
+  ]
+}

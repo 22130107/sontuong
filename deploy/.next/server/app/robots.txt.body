@@ -1,0 +1,6 @@
+User-Agent: *
+Allow: /
+Disallow: /gio-hang
+Disallow: /tim-kiem
+
+Sitemap: https://example.com/sitemap.xml

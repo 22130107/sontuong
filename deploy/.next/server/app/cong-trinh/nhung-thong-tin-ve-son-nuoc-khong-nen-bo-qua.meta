@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/cong-trinh/layout,_N_T_/cong-trinh/[slug]/layout,_N_T_/cong-trinh/[slug]/page,_N_T_/cong-trinh/nhung-thong-tin-ve-son-nuoc-khong-nen-bo-qua"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/cong-trinh/$d$slug/__PAGE__",
+    "/cong-trinh/$d$slug",
+    "/cong-trinh",
+    "/_index",
+    "/_head"
+  ]
+}

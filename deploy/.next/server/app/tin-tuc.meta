@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/tin-tuc/layout,_N_T_/tin-tuc/page,_N_T_/tin-tuc"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/tin-tuc/__PAGE__",
+    "/tin-tuc",
+    "/_index",
+    "/_head"
+  ]
+}
