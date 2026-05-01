@@ -15,10 +15,8 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  const products = await getProductsFromDB();
-  return products.map((p) => ({ slug: p.slug }));
-}
+// Force dynamic rendering - không build static
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
