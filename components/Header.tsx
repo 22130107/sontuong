@@ -5,24 +5,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart-context";
-import { COMPANY_INFO, LOGO_URL, CART_ICON_URL, PRODUCTS } from "@/lib/data";
+import { COMPANY_INFO, LOGO_URL, CART_ICON_URL } from "@/lib/data";
 
 // NaSun brand colors
 const BLUE = "#1a3a8f";
 const GOLD = "#e8b800";
 
-// Dropdown items — unique product names
-const PRODUCT_DROPDOWN = Array.from(
-  new Map(PRODUCTS.map((p) => [p.name, p])).values()
-).map((p) => ({ label: p.name, href: `/san-pham/${p.slug}`, thumbnail: p.thumbnail }));
+interface DropdownItem {
+  label: string;
+  href: string;
+}
 
-const NAV_ITEMS = [
+const NAV_ITEMS_BASE = [
   { label: "Trang chủ", href: "/" },
   { label: "Giới thiệu", href: "/gioi-thieu" },
-  { label: "Sản phẩm", href: "/san-pham", dropdown: PRODUCT_DROPDOWN },
-  { label: "Công trình", href: "/cong-trinh" },
-  { label: "Dịch vụ", href: "/dich-vu" },
-  { label: "Tin tức", href: "/tin-tuc" },
+  { label: "Sản phẩm", href: "/san-pham", hasDropdown: "products" as const },
+  { label: "Công trình", href: "/cong-trinh", hasDropdown: "projects" as const },
+  { label: "Dịch vụ", href: "/dich-vu", hasDropdown: "services" as const },
+  { label: "Tin tức", href: "/tin-tuc", hasDropdown: "news" as const },
   { label: "Liên hệ", href: "/lien-he" },
 ];
 
@@ -41,11 +41,56 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
   const { totalItems } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileProductOpen, setMobileProductOpen] = useState(false);
+  const [mobileProductOpen, setMobileProductOpen] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLLIElement>(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [dropdowns, setDropdowns] = useState<Record<string, DropdownItem[]>>({
+    products: [],
+    projects: [],
+    services: [],
+    news: [],
+  });
+  const navRef = useRef<HTMLUListElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Fetch tất cả dropdown data từ DB
+  useEffect(() => {
+    const fetchAll = async () => {
+      const [products, projects, services, news] = await Promise.allSettled([
+        fetch("/api/products?limit=20").then((r) => r.json()),
+        fetch("/api/projects?limit=20").then((r) => r.json()),
+        fetch("/api/services?limit=20").then((r) => r.json()),
+        fetch("/api/news?limit=10").then((r) => r.json()),
+      ]);
+
+      setDropdowns({
+        products: products.status === "fulfilled" && products.value.success
+          ? products.value.data.items.map((p: { name: string; slug: string }) => ({ label: p.name, href: `/san-pham/${p.slug}` }))
+          : [],
+        projects: projects.status === "fulfilled" && projects.value.success
+          ? projects.value.data.items.map((p: { title: string; slug: string }) => ({ label: p.title, href: `/cong-trinh/${p.slug}` }))
+          : [],
+        services: services.status === "fulfilled" && services.value.success
+          ? services.value.data.items.map((p: { title: string; slug: string }) => ({ label: p.title, href: `/dich-vu/${p.slug}` }))
+          : [],
+        news: news.status === "fulfilled" && news.value.success
+          ? news.value.data.items.map((p: { title: string; slug: string }) => ({ label: p.title, href: `/tin-tuc/${p.slug}` }))
+          : [],
+      });
+    };
+    fetchAll();
+  }, []);
+
+  const NAV_ITEMS = NAV_ITEMS_BASE.map((item) =>
+    item.hasDropdown ? { ...item, dropdown: dropdowns[item.hasDropdown] } : item
+  );
+
+  const VIEW_ALL: Record<string, string> = {
+    products: "/san-pham",
+    projects: "/cong-trinh",
+    services: "/dich-vu",
+    news: "/tin-tuc",
+  };
 
   useEffect(() => {
     if (!sticky) return;
@@ -57,21 +102,21 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false);
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenDropdown(null);
       }
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (key: string) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
-    setDropdownOpen(true);
+    setOpenDropdown(key);
   };
 
   const handleMouseLeave = () => {
-    closeTimer.current = setTimeout(() => setDropdownOpen(false), 150);
+    closeTimer.current = setTimeout(() => setOpenDropdown(null), 150);
   };
 
   const handleSearch = (e: React.FormEvent) => {
@@ -94,17 +139,17 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
       style={{ backgroundColor: BLUE }}
     >
       {/* ── Top bar: logo + contact + search ── */}
-      <div className="h-[72px]" style={{ backgroundColor: BLUE }}>
+      <div className="h-[90px]" style={{ backgroundColor: BLUE }}>
         <div className="flex items-center justify-between w-full max-w-[1320px] mx-auto px-4 h-full">
           {/* Logo */}
-          <div className="w-[180px] md:w-[260px] mr-4 flex-shrink-0">
+          <div className="w-[200px] md:w-[320px] mr-4 flex-shrink-0">
             <Link href="/" className="block">
               <Image
                 src={LOGO_URL}
                 alt="Sơn Mặt Trời Việt NaSun – Nhà phân phối sơn cao cấp"
-                width={260}
-                height={80}
-                className="max-h-[58px] w-auto object-contain"
+                width={320}
+                height={100}
+                className="max-h-[78px] w-auto object-contain"
                 priority
               />
             </Link>
@@ -181,16 +226,17 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
         style={{ backgroundColor: "#142e75", borderTopColor: "rgba(255,255,255,0.15)" }}
       >
         <div className="flex items-center justify-between w-full max-w-[1320px] mx-auto px-4">
-          <ul className="flex items-center flex-1">
+          <ul className="flex items-center flex-1" ref={navRef}>
             {NAV_ITEMS.map((item) => {
-              if (item.dropdown) {
+              if ('dropdown' in item && item.dropdown) {
+                const key = item.hasDropdown as string;
+                const isOpen = openDropdown === key;
                 // ── Dropdown item ──
                 return (
                   <li
                     key={item.href}
-                    ref={dropdownRef}
                     className="relative"
-                    onMouseEnter={handleMouseEnter}
+                    onMouseEnter={() => handleMouseEnter(key)}
                     onMouseLeave={handleMouseLeave}
                   >
                     <Link
@@ -202,9 +248,8 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
                       }`}
                     >
                       {item.label}
-                      {/* Chevron */}
                       <svg
-                        className={`w-3.5 h-3.5 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                         fill="none" stroke="currentColor" viewBox="0 0 24 24"
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
@@ -212,39 +257,35 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
                     </Link>
 
                     {/* Dropdown panel */}
-                    {dropdownOpen && (
+                    {isOpen && item.dropdown.length > 0 && (
                       <div
-                        className="absolute left-0 top-full z-50 bg-white shadow-xl rounded-b border-t-2 min-w-[220px]"
+                        className="absolute left-0 top-full z-50 bg-white shadow-xl rounded-b border-t-2 min-w-[220px] max-w-[280px]"
                         style={{ borderTopColor: GOLD }}
-                        onMouseEnter={handleMouseEnter}
+                        onMouseEnter={() => handleMouseEnter(key)}
                         onMouseLeave={handleMouseLeave}
                       >
                         <ul>
-                          {item.dropdown.map((sub, i) => (
-                            <li
-                              key={sub.href}
-                              className={`border-b last:border-0`}
-                              style={{ borderBottomColor: "#f0f0f0" }}
-                            >
+                          {item.dropdown.map((sub) => (
+                            <li key={sub.href} className="border-b last:border-0" style={{ borderBottomColor: "#f0f0f0" }}>
                               <Link
                                 href={sub.href}
-                                className="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-blue-50 hover:text-[#1a3a8f] transition-colors text-[15px] font-medium"
-                                onClick={() => setDropdownOpen(false)}
+                                className="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-blue-50 hover:text-[#1a3a8f] transition-colors text-[14px] font-medium"
+                                onClick={() => setOpenDropdown(null)}
                               >
                                 <PaintIcon />
-                                <span>{sub.label}</span>
+                                <span className="line-clamp-1">{sub.label}</span>
                               </Link>
                             </li>
                           ))}
                           {/* View all */}
                           <li className="border-t" style={{ borderTopColor: "#e8b800" }}>
                             <Link
-                              href="/san-pham"
+                              href={VIEW_ALL[key]}
                               className="flex items-center justify-center gap-1 px-4 py-2.5 text-sm font-bold text-white transition-colors"
                               style={{ backgroundColor: "#1a3a8f" }}
-                              onClick={() => setDropdownOpen(false)}
+                              onClick={() => setOpenDropdown(null)}
                             >
-                              Xem tất cả sản phẩm
+                              Xem tất cả
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                               </svg>
@@ -327,11 +368,14 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
           <ul>
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
-                {item.dropdown ? (
+                {'dropdown' in item && item.dropdown ? (
                   <>
-                    {/* Sản phẩm toggle */}
+                    {/* Toggle dropdown mobile */}
                     <button
-                      onClick={() => setMobileProductOpen(!mobileProductOpen)}
+                      onClick={() => {
+                        const key = item.hasDropdown as string;
+                        setMobileProductOpen(mobileProductOpen === key ? null as any : key as any);
+                      }}
                       className="w-full flex items-center justify-between px-4 py-3 font-bold uppercase text-sm border-b text-white"
                       style={{ borderBottomColor: "rgba(255,255,255,0.1)" }}
                     >
@@ -339,20 +383,20 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
                         {item.label}
                       </span>
                       <svg
-                        className={`w-4 h-4 transition-transform ${mobileProductOpen ? "rotate-180" : ""}`}
+                        className={`w-4 h-4 transition-transform ${mobileProductOpen === (item.hasDropdown as any) ? "rotate-180" : ""}`}
                         fill="none" stroke="currentColor" viewBox="0 0 24 24"
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    {mobileProductOpen && (
+                    {mobileProductOpen === (item.hasDropdown as any) && item.dropdown.length > 0 && (
                       <ul style={{ backgroundColor: "#0f2460" }}>
                         {item.dropdown.map((sub) => (
                           <li key={sub.href}>
                             <Link
                               href={sub.href}
-                              onClick={() => { setMobileMenuOpen(false); setMobileProductOpen(false); }}
-                              className="flex items-center gap-3 px-6 py-2.5 text-sm text-white/80 hover:text-yellow-400 border-b"
+                              onClick={() => { setMobileMenuOpen(false); setMobileProductOpen(null as any); }}
+                              className="flex items-center gap-3 px-6 py-2.5 text-sm text-white/80 hover:text-yellow-400 border-b line-clamp-1"
                               style={{ borderBottomColor: "rgba(255,255,255,0.07)" }}
                             >
                               <PaintIcon />
@@ -360,6 +404,16 @@ export default function Header({ sticky = false }: { sticky?: boolean }) {
                             </Link>
                           </li>
                         ))}
+                        <li>
+                          <Link
+                            href={VIEW_ALL[item.hasDropdown as string]}
+                            onClick={() => { setMobileMenuOpen(false); setMobileProductOpen(null as any); }}
+                            className="flex items-center justify-center gap-1 px-4 py-2.5 text-sm font-bold text-white"
+                            style={{ backgroundColor: "#1a3a8f" }}
+                          >
+                            Xem tất cả
+                          </Link>
+                        </li>
                       </ul>
                     )}
                   </>

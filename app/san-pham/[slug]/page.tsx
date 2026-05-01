@@ -5,7 +5,8 @@ import Footer from "@/components/Footer";
 import Breadcrumb from "@/components/Breadcrumb";
 import ProductCard from "@/components/ProductCard";
 import { BreadcrumbSchema, ProductSchema } from "@/components/SchemaMarkup";
-import { PRODUCTS, COMPANY_INFO } from "@/lib/data";
+import { COMPANY_INFO } from "@/lib/data";
+import { getProductsFromDB, getProductBySlugFromDB } from "@/lib/db-data";
 import ProductGallery from "./ProductGallery";
 import ProductTabs from "./ProductTabs";
 import BuyNowButton from "./BuyNowButton";
@@ -15,12 +16,13 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ slug: p.slug }));
+  const products = await getProductsFromDB();
+  return products.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = PRODUCTS.find((p) => p.slug === slug);
+  const product = await getProductBySlugFromDB(slug);
   if (!product) return {};
 
   return {
@@ -41,10 +43,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const product = PRODUCTS.find((p) => p.slug === slug);
+  const product = await getProductBySlugFromDB(slug);
   if (!product) notFound();
 
-  const related = PRODUCTS.filter((p) => p.id !== product.id).slice(0, 4);
+  const allProducts = await getProductsFromDB();
+  const related = allProducts.filter((p) => p.id !== product.id).slice(0, 4);
 
   const breadcrumbs = [
     { label: "Trang chủ", href: "/" },

@@ -4,31 +4,39 @@ import Footer from "@/components/Footer";
 import Slider from "@/components/Slider";
 import ProjectGrid from "@/components/ProjectGrid";
 import ProductCard from "@/components/ProductCard";
-import { SLIDER_IMAGES, PROJECTS, PRODUCTS } from "@/lib/data";
+import { getProductsFromDB, getProjectsFromDB, getSlidersFromDB } from "@/lib/db-data";
+
+// Không cache trang chủ — luôn lấy data mới nhất từ DB
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Trang Chủ | Sơn Mặt Trời Việt NaSun – Vũng Tàu",
   description:
     "Sơn Mặt Trời Việt NaSun – Chuyên thi công sơn nước, trần thạch cao tại Vũng Tàu. Liên hệ để được tư vấn miễn phí.",
-  alternates: {
-    canonical: "https://example.com",
-  },
+  alternates: { canonical: "https://example.com" },
   openGraph: {
     title: "Trang Chủ | Sơn Mặt Trời Việt NaSun – Vũng Tàu",
-    description:
-      "Chuyên thi công sơn nước, trần thạch cao tại Vũng Tàu. Liên hệ để được tư vấn miễn phí.",
+    description: "Chuyên thi công sơn nước, trần thạch cao tại Vũng Tàu. Liên hệ để được tư vấn miễn phí.",
     url: "https://example.com",
     type: "website",
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  // Fetch từ DB, fallback về data tĩnh nếu DB chưa có dữ liệu
+  const [products, projects, dbSliders] = await Promise.all([
+    getProductsFromDB({ limit: 5 }),
+    getProjectsFromDB({ limit: 6 }),
+    getSlidersFromDB(),
+  ]);
+
+  const sliderImages = dbSliders.map((s) => ({ src: s.image, alt: s.alt_text }));
   return (
     <div className="bg-[rgb(246,247,249)] min-h-screen">
       <Header />
       <main id="main">
         {/* Hero Slider */}
-        <Slider images={SLIDER_IMAGES} autoPlayInterval={5000} />
+        <Slider images={sliderImages} autoPlayInterval={5000} />
 
         {/* Featured Projects */}
         <section className="bg-white py-8">
@@ -46,7 +54,7 @@ export default function HomePage() {
             >
               CÔNG TRÌNH TIÊU BIỂU
             </h4>
-            <ProjectGrid projects={PROJECTS} showTabs={true} />
+            <ProjectGrid projects={projects} showTabs={true} />
           </div>
         </section>
 
@@ -60,7 +68,7 @@ export default function HomePage() {
               SẢN PHẨM NỔI BẬT
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {PRODUCTS.map((product) => (
+              {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>

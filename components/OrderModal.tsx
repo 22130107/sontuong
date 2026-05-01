@@ -77,9 +77,42 @@ export default function OrderModal({ product, isOpen, onClose }: OrderModalProps
     }
     setErrors({});
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1000));
-    setLoading(false);
-    setSubmitted(true);
+
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          gender: form.gender,
+          customer_name: form.name.trim(),
+          phone: form.phone.trim(),
+          email: form.email.trim() || undefined,
+          address: form.address.trim() || undefined,
+          note: form.note.trim() || undefined,
+          source: "website",
+          items: [
+            {
+              product_id: product.id ? Number(product.id) : undefined,
+              product_name: product.name,
+              product_slug: product.slug,
+              quantity: 1,
+              price_note: product.price || "Liên hệ",
+            },
+          ],
+        }),
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        setSubmitted(true);
+      } else {
+        setErrors({ name: result.message || "Đặt hàng thất bại, vui lòng thử lại" });
+      }
+    } catch {
+      setErrors({ name: "Lỗi kết nối, vui lòng thử lại" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (

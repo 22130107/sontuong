@@ -1,26 +1,26 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { PRODUCTS, NEWS } from "@/lib/data";
+import { getProductsFromDB, getNewsFromDB } from "@/lib/db-data";
+import { getAllProducts } from "@/lib/queries/products";
+import { query } from "@/lib/db";
 
 const HEADER_BG =
   "https://storage.googleapis.com/download/storage/v1/b/prd-storytodesign.appspot.com/o/h2d-ext-asset%2F4352ca4b5b2bc80b10fff0d55adb3e66b995e588.png?generation=1777545153297107&alt=media";
 
-const PRODUCT_CATEGORIES = [
-  { label: "Sơn nước", href: "/san-pham" },
-  { label: "Sơn chống thấm", href: "/san-pham" },
-  { label: "Sơn nội thất", href: "/san-pham" },
-  { label: "Sơn ngoại thất", href: "/san-pham" },
-  { label: "Trần thạch cao", href: "/dich-vu/thi-cong-tran-thach-cao" },
-];
-
-export default function Sidebar() {
-  const recentProducts = PRODUCTS.slice(0, 5);
-  const recentNews = NEWS.slice(0, 5);
+export default async function Sidebar() {
+  // Fetch song song từ DB
+  const [products, news, categoryRows] = await Promise.all([
+    getProductsFromDB({ limit: 5 }),
+    getNewsFromDB({ limit: 5 }),
+    query<{ category: string; cnt: number }>(
+      "SELECT category, COUNT(*) AS cnt FROM products GROUP BY category ORDER BY cnt DESC"
+    ),
+  ]);
 
   return (
     <aside className="space-y-6">
-      {/* Product categories */}
+      {/* Danh mục sản phẩm từ DB */}
       <div>
         <div
           className="bg-no-repeat table font-semibold relative uppercase w-full h-10 text-white text-[15px] tracking-[0.75px] leading-[37px] pl-4 mb-2"
@@ -29,21 +29,22 @@ export default function Sidebar() {
           Danh mục sản phẩm
         </div>
         <ul className="divide-y divide-gray-100">
-          {PRODUCT_CATEGORIES.map((cat) => (
-            <li key={cat.label}>
+          {categoryRows.map((cat) => (
+            <li key={cat.category}>
               <Link
-                href={cat.href}
+                href={`/san-pham?category=${encodeURIComponent(cat.category)}`}
                 className="flex items-center gap-1 text-[rgb(45,52,127)] py-2 hover:text-[rgb(232,184,0)] transition-colors text-sm"
               >
                 <span className="text-[rgb(232,184,0)] font-bold">›</span>
-                {cat.label}
+                {cat.category}
+                <span className="ml-auto text-xs text-gray-400">({cat.cnt})</span>
               </Link>
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Recent products */}
+      {/* Sản phẩm mới từ DB */}
       <div>
         <div
           className="bg-no-repeat table font-semibold relative uppercase w-full h-10 text-white text-[15px] tracking-[0.75px] leading-[37px] pl-4 mb-2"
@@ -52,7 +53,7 @@ export default function Sidebar() {
           Sản phẩm mới
         </div>
         <ul className="divide-y divide-gray-100">
-          {recentProducts.map((product) => (
+          {products.map((product) => (
             <li key={product.id} className="py-2">
               <Link
                 href={`/san-pham/${product.slug}`}
@@ -73,7 +74,9 @@ export default function Sidebar() {
                   </p>
                   <p className="text-xs mt-1">
                     Giá:{" "}
-                    <span className="font-bold text-red-600">{product.price}</span>
+                    <span className="font-bold text-red-600">
+                      {product.price || "Liên hệ"}
+                    </span>
                   </p>
                 </div>
               </Link>
@@ -82,7 +85,7 @@ export default function Sidebar() {
         </ul>
       </div>
 
-      {/* Recent news */}
+      {/* Bài viết mới từ DB */}
       <div>
         <div
           className="bg-no-repeat table font-semibold relative uppercase w-full h-10 text-white text-[15px] tracking-[0.75px] leading-[37px] pl-4 mb-2"
@@ -91,7 +94,7 @@ export default function Sidebar() {
           Bài viết mới
         </div>
         <ul className="divide-y divide-gray-100">
-          {recentNews.map((article) => (
+          {news.map((article) => (
             <li key={article.id} className="py-2">
               <Link
                 href={`/tin-tuc/${article.slug}`}

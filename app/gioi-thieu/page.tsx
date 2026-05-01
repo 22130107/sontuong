@@ -33,7 +33,7 @@ export default function AboutPage() {
       <BreadcrumbSchema items={breadcrumbs} />
       {/* Sticky header for about page */}
       <Header sticky />
-      <div className="h-[113px]" /> {/* Spacer for sticky header */}
+      <div className="h-[134px]" /> {/* Spacer for sticky header (90px top + 44px nav) */}
       <main id="main" className="py-4 pb-16">
         <div className="max-w-[1320px] mx-auto px-4">
           {/* Breadcrumb bar */}

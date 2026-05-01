@@ -5,19 +5,16 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Sidebar from "@/components/Sidebar";
 import ProjectGrid from "@/components/ProjectGrid";
 import { BreadcrumbSchema } from "@/components/SchemaMarkup";
-import { PROJECTS } from "@/lib/data";
+import { getProjectsFromDB } from "@/lib/db-data";
 
 export const metadata: Metadata = {
   title: "Công Trình",
   description:
     "Các công trình thi công sơn nước tiêu biểu của Mặt Trời Việt NaSun tại Vũng Tàu: chung cư, biệt thự, nhà phố, văn phòng.",
-  alternates: {
-    canonical: "https://example.com/cong-trinh",
-  },
+  alternates: { canonical: "https://example.com/cong-trinh" },
   openGraph: {
     title: "Công Trình | Sơn Mặt Trời Việt NaSun – Vũng Tàu",
-    description:
-      "Các công trình thi công sơn nước tiêu biểu tại Vũng Tàu: chung cư, biệt thự, nhà phố.",
+    description: "Các công trình thi công sơn nước tiêu biểu tại Vũng Tàu: chung cư, biệt thự, nhà phố.",
     url: "https://example.com/cong-trinh",
     type: "website",
   },
@@ -28,7 +25,8 @@ const breadcrumbs = [
   { label: "Công trình" },
 ];
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const projects = await getProjectsFromDB();
   return (
     <div className="bg-[rgb(246,247,249)] min-h-screen">
       <BreadcrumbSchema items={breadcrumbs} />
@@ -52,7 +50,7 @@ export default function ProjectsPage() {
                 Công Trình Thi Công Sơn Nước
               </h1>
 
-              <ProjectGrid projects={PROJECTS} showTabs={false} />
+              <ProjectGrid projects={projects} showTabs={false} />
             </div>
           </div>
         </div>

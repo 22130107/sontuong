@@ -315,7 +315,7 @@ export const SLIDER_IMAGES = [
   },
 ];
 
-export const LOGO_URL = "/logo.jpg";
+export const LOGO_URL = "/logo.png";
 export const CART_ICON_URL = `${IMG_BASE}e63cfcd394677b12b9a121e469cbbd3f76974609.png?generation=1777545030333650&alt=media`;
 
 // Thay đổi domain thực tế của bạn tại đây

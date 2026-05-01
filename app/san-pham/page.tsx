@@ -5,7 +5,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Sidebar from "@/components/Sidebar";
 import ProductCard from "@/components/ProductCard";
 import { BreadcrumbSchema } from "@/components/SchemaMarkup";
-import { PRODUCTS } from "@/lib/data";
+import { getProductsFromDB } from "@/lib/db-data";
 import SortSelect from "./SortSelect";
 
 export const metadata: Metadata = {
@@ -38,11 +38,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const sort = params.sort;
 
-  let products = [...PRODUCTS];
-
-  if (sort === "name-asc") {
-    products = products.sort((a, b) => a.name.localeCompare(b.name));
-  }
+  const products = await getProductsFromDB({ sort });
 
   return (
     <div className="bg-[rgb(246,247,249)] min-h-screen">

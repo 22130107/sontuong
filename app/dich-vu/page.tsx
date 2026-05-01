@@ -3,21 +3,17 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Breadcrumb from "@/components/Breadcrumb";
 import { BreadcrumbSchema } from "@/components/SchemaMarkup";
-import { SERVICES } from "@/lib/data";
+import { getServicesFromDB } from "@/lib/db-data";
 import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Dịch Vụ",
-  description:
-    "Dịch vụ thi công sơn nước, sơn nhà mới, sơn sửa nhà cũ, thi công trần thạch cao, xử lý tường nứt thấm dột tại Vũng Tàu.",
-  alternates: {
-    canonical: "https://example.com/dich-vu",
-  },
+  description: "Dịch vụ thi công sơn nước, sơn nhà mới, sơn sửa nhà cũ, thi công trần thạch cao, xử lý tường nứt thấm dột tại Vũng Tàu.",
+  alternates: { canonical: "https://example.com/dich-vu" },
   openGraph: {
     title: "Dịch Vụ | Sơn Mặt Trời Việt NaSun – Vũng Tàu",
-    description:
-      "Dịch vụ thi công sơn nước, trần thạch cao, xử lý tường nứt thấm dột tại Vũng Tàu.",
+    description: "Dịch vụ thi công sơn nước, trần thạch cao, xử lý tường nứt thấm dột tại Vũng Tàu.",
     url: "https://example.com/dich-vu",
     type: "website",
   },
@@ -28,7 +24,8 @@ const breadcrumbs = [
   { label: "Dịch vụ" },
 ];
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const services = await getServicesFromDB();
   return (
     <div className="bg-[rgb(246,247,249)] min-h-screen">
       <BreadcrumbSchema items={breadcrumbs} />
@@ -46,7 +43,7 @@ export default function ServicesPage() {
             </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {SERVICES.map((service) => (
+              {services.map((service) => (
                 <Link
                   key={service.id}
                   href={`/dich-vu/${service.slug}`}

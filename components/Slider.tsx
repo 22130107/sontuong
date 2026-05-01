@@ -29,6 +29,8 @@ export default function Slider({ images, autoPlayInterval = 5000 }: SliderProps)
     return () => clearInterval(timer);
   }, [next, autoPlayInterval]);
 
+  if (images.length === 0) return null;
+
   return (
     <section className="relative w-full overflow-hidden" aria-label="Banner slider">
       {/* Slides */}
